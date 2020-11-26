@@ -1,0 +1,19 @@
+:root {
+    --default-text: #090909;
+    --danger-color: #FE2712;
+    --go-color: #66B032;
+    --canvas-background: #b3deef;
+    --page-background: #fffbf7;
+    --state-button-color: #c1c1c1;
+}
+
+.unselectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+button:active {
+    filter: brightness(85%);
+}

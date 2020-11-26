@@ -1,0 +1,16 @@
+html,
+body {
+    margin-left: 0.5%;
+    margin-top: 1%;
+    font-family: 'Roboto', sans-serif;
+    background: var(--page-background);
+    touch-action: manipulation !important;
+}
+
+div {
+    display: inline-block;
+    height: 20vh;
+    width: 9vw;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
