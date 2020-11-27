@@ -76,7 +76,7 @@ gameIO.on('connection', socket => {
     }
 
     let redCardIds = getRedCardIds().sort((a, b) => {
-        return Math.random() < 0.5 ? 0 : 1;
+        return Math.random() < 0.5 ? -1 : 1;
     })
 
     redCardIds.splice(7)

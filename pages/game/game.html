@@ -4,11 +4,29 @@
     <meta charset="UTF-8">
     <title>Apples To Apples</title>
 
-    <link rel="stylesheet" type = "text/css" href="/assets/style.css">
-    <link rel="stylesheet" type = "text/css" href="game.css">
+    <link rel="stylesheet" type="text/css" href="/assets/style.css">
+    <link rel="stylesheet" type="text/css" href="game.css">
 </head>
 <body>
-    <div id="card-viewer"></div>
+<div id="card-viewer" hidden></div>
+<div id="select-card-view" class="page">
+    <div id="select-card-grid">
+        <div id="select-card-greencard" class="select-card-card-display"></div>
+        <div id="select-card-redcard1" class="select-card-card-display"></div>
+        <div id="select-card-redcard2" class="select-card-card-display"></div>
+        <div id="select-card-redcard3" class="select-card-card-display"></div>
+        <div id="select-card-redcard4" class="select-card-card-display"></div>
+        <div id="select-card-redcard5" class="select-card-card-display"></div>
+        <div id="select-card-redcard6" class="select-card-card-display"></div>
+        <div id="select-card-redcard7" class="select-card-card-display"></div>
+    </div>
+    <div id="select-card-selection-overlay">
+        <div id="select-card-selection-buttons-wrapper">
+            <button id="select-card-exit-button" class="select-card-selection-button">Exit</button>
+            <button id="select-card-select-button" class="select-card-selection-button">Select</button>
+        </div>
+    </div>
+</div>
 
 <script src="/assets/jquery.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>

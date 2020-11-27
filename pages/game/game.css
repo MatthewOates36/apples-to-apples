@@ -1,16 +1,117 @@
 html,
 body {
-    margin-left: 0.5%;
-    margin-top: 1%;
+    width: 100%;
+    height: 100%;
+    margin: 0;
     font-family: 'Roboto', sans-serif;
     background: var(--page-background);
     touch-action: manipulation !important;
+    overflow: hidden;
 }
 
-div {
+.page {
+    width: 100%;
+    height: 100%;
+    background: #304c8c
+}
+
+#select-card-grid {
+    width: 98%;
+    height: 98%;
+    padding: 1%;
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr 3fr 1fr;
+    grid-template-columns: repeat(7, 1fr);
+    grid-column-gap: 1%;
+}
+
+.select-card-card-display {
     display: inline-block;
-    height: 20vh;
-    width: 9vw;
     background-repeat: no-repeat;
     background-size: contain;
+    background-position: center;
+
+    transition: width 250ms, height 250ms, left 250ms, top 250ms;
 }
+
+.select-card-card-display-fullscreen{
+    position: absolute !important;
+    left: 10vw !important;
+    top: 5vh !important;
+    width: 80vw !important;
+    height: 80vh !important;
+}
+
+#select-card-greencard {
+    grid-area: 2/4/3/5;
+}
+
+#select-card-redcard1 {
+    grid-area: 4/1/5/2;
+}
+
+#select-card-redcard2 {
+    grid-area: 4/2/5/3;
+}
+
+#select-card-redcard3 {
+    grid-area: 4/3/5/4;
+}
+
+#select-card-redcard4 {
+    grid-area: 4/4/5/5;
+}
+
+#select-card-redcard5 {
+    grid-area: 4/5/5/6;
+}
+
+#select-card-redcard6 {
+    grid-area: 4/6/5/7;
+}
+
+#select-card-redcard7 {
+    grid-area: 4/7/5/8;
+}
+
+#select-card-selection-overlay {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 70%;
+}
+
+#select-card-selection-buttons-wrapper {
+    position: absolute;
+    margin: auto;
+    width: 100vw;
+    bottom: 3vh;
+    text-align: center;
+    user-select: none;
+}
+
+.select-card-selection-button {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    padding: 0 1% 0 1%;
+    margin: 0 0.5% 0 0.5%;
+    height: 7vh;
+    font-size: 5vmin;
+    border: 0;
+    border-radius: 1vmin;
+    opacity: 200%;
+}
+
+#select-card-exit-button {
+    background: white;
+}
+
+#select-card-select-button {
+    background: greenyellow;
+}
+
