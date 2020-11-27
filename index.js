@@ -66,7 +66,6 @@ loginIO.on('connection', socket => {
     })
 })
 
-
 gameIO.on('connection', socket => {
     let id = undefined
 
@@ -76,10 +75,20 @@ gameIO.on('connection', socket => {
 
     }
 
-    socket.emit('cards', JSON.stringify(fs.readdirSync(path.join(__dirname, cardPath, 'red'))))
+    let redCardIds = getRedCardIds().sort((a, b) => {
+        return Math.random() < 0.5 ? 0 : 1;
+    })
+
+    redCardIds.splice(7)
+
+    socket.emit('hand', JSON.stringify(redCardIds))
 })
 
-console.log(fs.readdirSync(path.join(__dirname, cardPath, 'green')))
+let getRedCardIds = () => {
+    let redCardNames = fs.readdirSync(path.join(__dirname, cardPath, 'red'))
+
+    return redCardNames.map(card => card.replace('card-', '').replace('.jpg', ''))
+}
 
 http.listen(port, () => {
     console.log(`Listening on http://${ip}:${port}`)
