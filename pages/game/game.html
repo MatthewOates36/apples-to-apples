@@ -8,8 +8,20 @@
     <link rel="stylesheet" type="text/css" href="game.css">
 </head>
 <body>
-<div id="card-viewer" hidden></div>
-<div id="select-card-view" class="page">
+<div id="judge" class="page">
+    <div id="judge-card-grid">
+        <div id="judge-greencard" class="judge-card-display"></div>
+        <div id="judge-redcards-wrapper"></div>
+    </div>
+    <div id="judge-selection-overlay">
+        <div id="judge-selection-buttons-wrapper">
+            <button id="judge-exit-button" class="judge-selection-button">Exit</button>
+            <button id="judge-select-button" class="judge-selection-button">Select</button>
+        </div>
+    </div>
+</div>
+
+<div id="select-card-view" class="page" hidden>
     <div id="select-card-grid">
         <div id="select-card-greencard" class="select-card-card-display"></div>
         <div id="select-card-redcard1" class="select-card-card-display"></div>
