@@ -8,12 +8,46 @@
     <link rel="stylesheet" type="text/css" href="game.css">
 </head>
 <body>
-<div id="judge" class="page">
+
+<div id="table-view" class="page" hidden>
+    <div id="table-grid">
+        <div id="table-left-wrapper" class="table-vertical-wrapper"></div>
+        <div id="table-top-wrapper" class="table-horizontal-wrapper"></div>
+        <div id="table-right-wrapper" class="table-vertical-wrapper"></div>
+        <div id="table-bottom-wrapper" class="table-horizontal-wrapper">
+            <div id="table-self-display" class="table-user-display">
+                <div id="table-self-score" class="table-greencard-score-back"></div>
+                <div id="table-self-name" class="table-name-display"></div>
+            </div>
+        </div>
+        <div id="table-greencard" class="table-card-display" hidden>
+            <div id="table-greencard-inner" class="table-card-inner">
+                <div class="table-greencard-back"></div>
+                <div id="table-greencard-front" class="table-card-front"></div>
+            </div>
+        </div>
+        <div id="table-selected-cards-wrapper"></div>
+    </div>
+    <div id="table-selection-overlay" hidden>
+        <div id="table-selection-buttons-wrapper">
+            <button id="table-exit-button" class="table-selection-button">Exit</button>
+            <button id="table-show-button" class="table-selection-button">Show</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="judge-view" class="page" hidden>
     <div id="judge-card-grid">
-        <div id="judge-greencard" class="judge-card-display"></div>
+        <div id="judge-greencard" class="judge-card-display">
+            <div id="judge-greencard-inner" class="judge-card-inner judge-show-card">
+                <div class="judge-greencard-back"></div>
+                <div id="judge-greencard-front" class="judge-card-front"></div>
+            </div>
+        </div>
         <div id="judge-redcards-wrapper"></div>
     </div>
-    <div id="judge-selection-overlay">
+    <div id="judge-selection-overlay" hidden>
         <div id="judge-selection-buttons-wrapper">
             <button id="judge-exit-button" class="judge-selection-button">Exit</button>
             <button id="judge-select-button" class="judge-selection-button">Select</button>
@@ -21,18 +55,59 @@
     </div>
 </div>
 
+
 <div id="select-card-view" class="page" hidden>
     <div id="select-card-grid">
-        <div id="select-card-greencard" class="select-card-card-display"></div>
-        <div id="select-card-redcard1" class="select-card-card-display"></div>
-        <div id="select-card-redcard2" class="select-card-card-display"></div>
-        <div id="select-card-redcard3" class="select-card-card-display"></div>
-        <div id="select-card-redcard4" class="select-card-card-display"></div>
-        <div id="select-card-redcard5" class="select-card-card-display"></div>
-        <div id="select-card-redcard6" class="select-card-card-display"></div>
-        <div id="select-card-redcard7" class="select-card-card-display"></div>
+        <div id="select-card-greencard" class="select-card-display">
+            <div class="select-card-card-inner select-card-show-card">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-greencard-front" class="select-card-front"></div>
+            </div>
+        </div>
+        <div id="select-card-redcard1" class="select-card-display">
+            <div class="select-card-card-inner">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-redcard1-front" class="select-card-front"></div>
+            </div>
+        </div>
+        <div id="select-card-redcard2" class="select-card-display">
+            <div class="select-card-card-inner">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-redcard2-front" class="select-card-front"></div>
+            </div>
+        </div>
+        <div id="select-card-redcard3" class="select-card-display">
+            <div class="select-card-card-inner">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-redcard3-front" class="select-card-front"></div>
+            </div>
+        </div>
+        <div id="select-card-redcard4" class="select-card-display">
+            <div class="select-card-card-inner">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-redcard4-front" class="select-card-front"></div>
+            </div>
+        </div>
+        <div id="select-card-redcard5" class="select-card-display">
+            <div class="select-card-card-inner">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-redcard5-front" class="select-card-front"></div>
+            </div>
+        </div>
+        <div id="select-card-redcard6" class="select-card-display">
+            <div class="select-card-card-inner">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-redcard6-front" class="select-card-front"></div>
+            </div>
+        </div>
+        <div id="select-card-redcard7" class="select-card-display">
+            <div class="select-card-card-inner">
+                <div class="select-card-redcard-back"></div>
+                <div id="select-card-redcard7-front" class="select-card-front"></div>
+            </div>
+        </div>
     </div>
-    <div id="select-card-selection-overlay">
+    <div id="select-card-selection-overlay" hidden>
         <div id="select-card-selection-buttons-wrapper">
             <button id="select-card-exit-button" class="select-card-selection-button">Exit</button>
             <button id="select-card-select-button" class="select-card-selection-button">Select</button>

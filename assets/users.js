@@ -13,7 +13,8 @@ class UserHandler {
         }
 
         if(!fs.existsSync(this.file)) {
-            fs.writeFileSync(this.file, '{}')
+            console.log('Users file does not exist')
+            fs.writeFileSync(this.file, JSON.stringify({}))
         }
     }
 
@@ -37,9 +38,8 @@ class UserHandler {
 
     setUsers(users, callback = () => {
     }) {
-        if (callback !== undefined) {
-            fs.writeFile(this.file, users.toPrettyString(), this.options, callback)
-        }
+        this.setUsersSync(users)
+        callback()
     }
 
     setUsersSync(users) {
@@ -77,6 +77,9 @@ class Users {
     }
 
     includes(id) {
+        if(undefined === id) {
+            return false
+        }
         return this.getUser(id) !== undefined
     }
 
