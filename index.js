@@ -14,7 +14,7 @@ const gameIO = io.of('/game')
 const controllerIO = io.of('/controller')
 
 const ip = require('ip').address()
-const port = 80
+const port = 8888
 
 const cardPath = path.join(__dirname, '/assets/cards/')
 
