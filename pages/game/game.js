@@ -63,6 +63,7 @@ socket.on('users', message => {
             addUser('top', data[3])
             addUser('top', data[4])
             addUser('right', data[5])
+            break
         case 7:
             addUser('left', data[1])
             addUser('left', data[2])
@@ -70,6 +71,7 @@ socket.on('users', message => {
             addUser('top', data[4])
             addUser('right', data[5])
             addUser('right', data[6])
+            break
         case 8:
             addUser('left', data[1])
             addUser('left', data[2])
@@ -78,6 +80,7 @@ socket.on('users', message => {
             addUser('top', data[5])
             addUser('right', data[6])
             addUser('right', data[7])
+            break
         case 9:
             addUser('left', data[1])
             addUser('left', data[2])
@@ -87,6 +90,7 @@ socket.on('users', message => {
             addUser('top', data[6])
             addUser('right', data[7])
             addUser('right', data[8])
+            break
         case 10:
             addUser('left', data[1])
             addUser('left', data[2])
@@ -97,6 +101,7 @@ socket.on('users', message => {
             addUser('right', data[7])
             addUser('right', data[8])
             addUser('right', data[9])
+            break
     }
 })
 
