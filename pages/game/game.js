@@ -2,6 +2,12 @@ const socket = io('/game')
 
 const body = $(document.body)
 
+const Pages = {
+    TABLE: "table",
+    JUDGE: "judge",
+    SELECT_CARD: "select-card"
+}
+
 let id
 let name
 let judge = false
@@ -108,13 +114,27 @@ socket.on('users', message => {
 socket.on('num-selected', message => {
     let data = JSON.parse(message)
 
+    $('.table-user-display').removeClass('table-user-display-judge')
+
+    let judgeElement = $('.table-user-display[data-id="' + data.id + '"]')
+
+    judgeElement.addClass('table-user-display-judge')
+
+    judge = data.judge === id
+
+    tableGreenCard.removeClass('table-greencard-shake')
+    tableGreenCardInner.addClass('table-show-card')
+
+    $('#table-greencard-front, #judge-greencard-front')
+        .css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
+
     tableSetNumSelected(data.num)
 })
 
 socket.on('selected-cards', message => {
     let data = JSON.parse(message)
 
-    showPage('table')
+    showPage(Pages.TABLE)
 
     tableSetSelected(data.selected)
 
@@ -122,7 +142,11 @@ socket.on('selected-cards', message => {
         judgeSetSelected(data.selected)
     }
 
-    shuffle()
+    if(data.shuffle === undefined || data.shuffle === true) {
+        shuffle()
+    } else if(judge) {
+        showPage(Pages.JUDGE)
+    }
 })
 
 socket.on('flip-selected', message => {
@@ -135,6 +159,18 @@ socket.on('flip-selected', message => {
 socket.on('hand', message => {
     let data = JSON.parse(message)
 
+    tableGreenCard.removeClass('table-greencard-shake')
+    tableGreenCard.attr('hidden', false)
+
+    $('#table-greencard-front, #judge-greencard-front')
+        .css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
+
+    setTimeout(() => {
+        tableGreenCardInner.addClass('table-card-animate')
+        tableGreenCardInner.addClass('table-show-card')
+        hasGreenCard = true
+    }, 100)
+
     if (judge) {
         clearTimeout(shakeTimeout)
         tableGreenCard.removeClass('table-greencard-shake')
@@ -143,9 +179,10 @@ socket.on('hand', message => {
         }, 500)
     } else {
 
-        showPage('select-card')
+        showPage(Pages.SELECT_CARD)
 
-        $('#select-card-greencard-front').css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
+        $('#select-card-greencard-front')
+            .css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
 
         dealDelay = 0
 
@@ -156,15 +193,26 @@ socket.on('hand', message => {
 })
 
 socket.on('judge', message => {
+    if(judge) {
+        return
+    }
+
     let data = JSON.parse(message)
 
     $('.table-user-display').removeClass('table-user-display-judge')
 
-    let judgeElement = $('.table-user-display[data-id="' + data.id + '"]')
+    let judgeElement = $('.table-user-display[data-id="' + data.judge + '"]')
 
     judgeElement.addClass('table-user-display-judge')
 
-    judge = data.id === id
+    judge = data.judge === id
+
+    tableGreenCard.removeClass('table-greencard-shake')
+    tableGreenCardInner.addClass('table-card-animate')
+    tableGreenCardInner.addClass('table-show-card')
+
+    $('#table-greencard-front, #judge-greencard-front')
+        .css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
 
     if (judge) {
         tableGreenCard.addClass('table-greencard-shake')
@@ -179,7 +227,8 @@ socket.on('greencard', message => {
 
     tableGreenCard.removeClass('table-greencard-shake')
 
-    $('#table-greencard-front, #judge-greencard-front').css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
+    $('#table-greencard-front, #judge-greencard-front')
+        .css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
 
     setTimeout(() => {
         tableGreenCardInner.addClass('table-card-animate')
@@ -200,7 +249,7 @@ socket.on('judge-selected', message => {
     hasGreenCard = false
     judge = false
 
-    showPage('table')
+    showPage(Pages.TABLE)
 
     let cardWrappers = $('#table-selected-cards-wrapper').children()
 
@@ -439,7 +488,7 @@ const shuffle = () => {
                 cardElement.css('height', '')
 
                 if(judge) {
-                    showPage('judge')
+                    showPage(Pages.JUDGE)
                 }
             }, 1000)
         }, delay + 3000)
@@ -755,7 +804,7 @@ const selectCardFullScreenCard = (event) => {
 
         setTimeout(() => {
             selectCardSelectionOverlay.attr('hidden', true)
-            showPage('table')
+            showPage(Pages.TABLE)
         }, 500)
 
         event.stopPropagation()
@@ -802,5 +851,5 @@ const selectCard = (id) => {
 $('.select-card-display, #select-card-greencard').one('click', selectCardFullScreenCard)
 
 
-showPage('table')
+showPage(Pages.TABLE)
 

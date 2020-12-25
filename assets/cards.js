@@ -154,6 +154,10 @@ class CardHandler {
             return Math.random() < 0.5 ? -1 : 1
         })
     }
+
+    reset() {
+        this.writeUsedCards({red: [], green: []})
+    }
 }
 
 module.exports = {

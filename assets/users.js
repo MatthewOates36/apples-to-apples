@@ -45,6 +45,10 @@ class UserHandler {
     setUsersSync(users) {
         fs.writeFileSync(this.file, users.toPrettyString(), this.options)
     }
+
+    reset() {
+        fs.writeFileSync(this.file, JSON.stringify({}))
+    }
 }
 
 class Users {

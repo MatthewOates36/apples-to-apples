@@ -140,6 +140,18 @@ class GameHandler {
         return true
     }
 
+    hasUserSelected(user) {
+        let allUserData = this.getAllUserData()
+
+        let userData = allUserData[user]
+
+        if(undefined === userData) {
+            return false
+        }
+
+        return undefined !== userData['selectedcard']
+    }
+
     getSelectedCards() {
         let allUserData = this.getAllUserData()
 
@@ -268,6 +280,10 @@ class GameHandler {
         finalData[data[data.length - 2]] = data[data.length - 1]
 
         this.writeAllData(allData)
+    }
+
+    reset() {
+        this.writeAllData({users: {}, order: []})
     }
 }
 

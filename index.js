@@ -4,6 +4,7 @@ const http = require('http').createServer(app)
 const cookie = require('cookie')
 const io = require('socket.io')(http)
 const path = require('path')
+const fs = require('fs')
 
 const {UserHandler} = require('./assets/users.js')
 const {CardHandler} = require('./assets/cards.js')
@@ -27,13 +28,17 @@ const game = new GameHandler(userHandler, cardHandler, __dirname + '/data/game.j
 const GameMode = {
     STARTING: 0,
     PAUSED: 1,
-    RUNNING: 2
+    START_ROUND: 2,
+    GREEN_CARD: 3,
+    SELECT_CARD: 4,
+    JUDGE: 5
 }
 
 let currentGameMode = GameMode.STARTING
 
-let currentSelectedCards = []
+let judge
 let flippedCards = []
+let currentSelectedCards = []
 
 
 app.use('/pages', express.static(path.join(__dirname, 'pages')))
@@ -116,6 +121,32 @@ gameIO.on('connection', socket => {
         game.addUser(id)
 
         sendUserList()
+
+        switch (currentGameMode) {
+            case GameMode.START_ROUND:
+                sendJudge(socket)
+                break
+            case GameMode.GREEN_CARD:
+                sendJudge(socket)
+                sendGreenCard()
+                break
+            case GameMode.SELECT_CARD:
+                if(judge === id) {
+                    sendJudge(socket)
+                    sendGreenCard()
+                } else {
+                    startSelect()
+                }
+                break
+            case GameMode.JUDGE:
+                sendJudge(socket)
+                socket.emit('selected-cards', JSON.stringify(
+                    {selected: currentSelectedCards, shuffle: false, greencard: game.getGreenCard()}))
+                for(let card of flippedCards) {
+                    socket.emit('flip-selected', JSON.stringify({selected: card}))
+                }
+                break
+        }
     })
 
     socket.on('show-greencard', () => {
@@ -183,8 +214,6 @@ controllerIO.on('connection', socket => {
     sendUserList()
 
     socket.on('start-game', () => {
-        currentGameMode = GameMode.RUNNING
-
         game.start()
 
         startRound()
@@ -199,7 +228,9 @@ controllerIO.on('connection', socket => {
     })
 
     socket.on('reset-game', () => {
-
+        userHandler.reset()
+        game.reset()
+        cardHandler.reset()
     })
 
     socket.on('remove-player', message => {
@@ -252,18 +283,23 @@ const sendUserList = () => {
 
 const startRound = () => {
     sendJudge()
+
+    currentGameMode = GameMode.START_ROUND
 }
 
-const sendJudge = () => {
-    let judge = game.getJudge()
+const sendJudge = (io = gameIO) => {
+    judge = game.getJudge()
 
     let users = userHandler.getUsersSync()
 
-    gameIO.emit('judge', JSON.stringify({id: judge, name: users.getUserProperty(judge, 'name')}))
+    io.emit('judge', JSON.stringify(
+        {judge: judge, name: users.getUserProperty(judge, 'name'), greencard: game.getGreenCard()}))
 }
 
 const sendGreenCard = () => {
     gameIO.emit('greencard', JSON.stringify({greencard: game.getGreenCard()}))
+
+    currentGameMode = GameMode.GREEN_CARD
 }
 
 const startSelect = () => {
@@ -273,18 +309,29 @@ const startSelect = () => {
         if (users.getUserProperty(user, 'connected')) {
             let socket = gameIO.sockets.get(users.getUserProperty(user, 'socket'))
             if (undefined !== socket) {
-                socket.emit('hand', JSON.stringify({greencard: game.getGreenCard(), cards: game.getHand(user)}))
+                if(game.hasUserSelected(user)) {
+                    socket.emit('num-selected', JSON.stringify(
+                        {num: game.getSelectedCards().length, judge: judge, greencard: game.getGreenCard()}))
+                } else {
+                    socket.emit('hand', JSON.stringify(
+                        {greencard: game.getGreenCard(), cards: game.getHand(user)}))
+                }
             }
         }
     }
+
+    currentGameMode = GameMode.SELECT_CARD
 }
 
 const sendNumSelectedCards = () => {
-    gameIO.emit('num-selected', JSON.stringify({num: game.getSelectedCards().length}))
+    gameIO.emit('num-selected', JSON.stringify(
+        {num: game.getSelectedCards().length, judge: judge, greencard: game.getGreenCard()}))
 }
 
 const sendSelectedCards = () => {
-    gameIO.emit('selected-cards', JSON.stringify({selected: currentSelectedCards}))
+    gameIO.emit('selected-cards', JSON.stringify({selected: currentSelectedCards, greencard: game.getGreenCard()}))
+
+    currentGameMode = GameMode.JUDGE
 }
 
 const randomizeArray = (array) => {
