@@ -116,7 +116,7 @@ socket.on('num-selected', message => {
 
     $('.table-user-display').removeClass('table-user-display-judge')
 
-    let judgeElement = $('.table-user-display[data-id="' + data.id + '"]')
+    let judgeElement = $('.table-user-display[data-id="' + data.judge + '"]')
 
     judgeElement.addClass('table-user-display-judge')
 
@@ -208,8 +208,8 @@ socket.on('judge', message => {
     judge = data.judge === id
 
     tableGreenCard.removeClass('table-greencard-shake')
-    tableGreenCardInner.addClass('table-card-animate')
-    tableGreenCardInner.addClass('table-show-card')
+    tableGreenCardInner.removeClass('table-card-animate')
+    tableGreenCardInner.removeClass('table-show-card')
 
     $('#table-greencard-front, #judge-greencard-front')
         .css('background-image', 'url(/assets/cards/green/card-' + data.greencard + '.jpg')
@@ -254,7 +254,7 @@ socket.on('judge-selected', message => {
     let cardWrappers = $('#table-selected-cards-wrapper').children()
 
     for(let cardWrapper of cardWrappers) {
-        if($(cardWrapper).find('.table-card-front').attr('data-card') !== data.selected) {
+        if ($(cardWrapper).find('.table-card-front').attr('data-card') !== data.selected) {
             $(cardWrapper).find('.table-card-inner').removeClass('table-show-card')
             let cardElement = $(cardWrapper).find('.table-card-display')
             setTimeout(() => {
@@ -279,54 +279,52 @@ socket.on('judge-selected', message => {
                     $(cardWrapper).remove()
                 }, 1000)
             }, 1000)
-        }
-
-        setTimeout(() => {
-            tableGreenCard.removeClass('table-card-slide')
-            tableGreenCard.removeClass('table-card-slide-top')
-
-            let tableGreenCardPosition = tableGreenCard.position()
-
-            tableGreenCard.css('left', tableGreenCardPosition.left)
-            tableGreenCard.css('top', tableGreenCardPosition.top)
-            tableGreenCard.css('width', tableGreenCard.width())
-            tableGreenCard.css('height', tableGreenCard.height())
-            tableGreenCard.css('z-index', 3000)
-            tableGreenCard.css('position', 'absolute')
-            tableGreenCard.position()
-
-            tableGreenCard.addClass('table-card-slide-top')
-
-            let finalPositionElement = $('.table-user-display[data-id="' + data.winner + '"]')
-
-            let finalPosition = finalPositionElement.position()
-
-            console.log(finalPositionElement)
-
-            tableGreenCard.css('left', finalPosition.left)
-            tableGreenCard.css('top', finalPosition.top)
-            tableGreenCard.position()
-
+        } else {
             setTimeout(() => {
+                tableGreenCard.removeClass('table-card-slide')
                 tableGreenCard.removeClass('table-card-slide-top')
 
-                let tableGreenCardInner = $(tableGreenCard.children())
-                tableGreenCardInner.removeClass('table-card-animate')
-                tableGreenCardInner.removeClass('table-show-card')
+                let tableGreenCardPosition = tableGreenCard.position()
 
-                tableGreenCard.css('left', '')
-                tableGreenCard.css('top', '')
-                tableGreenCard.css('width', '')
-                tableGreenCard.css('height', '')
-                tableGreenCard.css('z-index', '')
-                tableGreenCard.css('position', '')
+                tableGreenCard.css('left', tableGreenCardPosition.left)
+                tableGreenCard.css('top', tableGreenCardPosition.top)
+                tableGreenCard.css('width', tableGreenCard.width())
+                tableGreenCard.css('height', tableGreenCard.height())
+                tableGreenCard.css('z-index', 3000)
+                tableGreenCard.css('position', 'absolute')
                 tableGreenCard.position()
 
-                tableGreenCardInner.addClass('table-card-animate')
+                tableGreenCard.addClass('table-card-slide-top')
 
-                tableSelectedCardsWrapper.empty()
-            }, 1000)
-        }, 4000)
+                let finalPositionElement = $('.table-user-display[data-id="' + data.winner + '"] > div.table-name-display')
+
+                let finalPosition = finalPositionElement.position()
+
+                tableGreenCard.css('left', finalPosition.left + finalPositionElement.width() / 2 - tableGreenCard.width() / 2)
+                tableGreenCard.css('top', finalPosition.top)
+                tableGreenCard.position()
+
+                setTimeout(() => {
+                    tableGreenCard.removeClass('table-card-slide-top')
+
+                    let tableGreenCardInner = $(tableGreenCard.children())
+                    tableGreenCardInner.removeClass('table-card-animate')
+                    tableGreenCardInner.removeClass('table-show-card')
+
+                    tableGreenCard.css('left', '')
+                    tableGreenCard.css('top', '')
+                    tableGreenCard.css('width', '')
+                    tableGreenCard.css('height', '')
+                    tableGreenCard.css('z-index', '')
+                    tableGreenCard.css('position', '')
+                    tableGreenCard.position()
+
+                    tableGreenCardInner.addClass('table-card-animate')
+
+                    tableSelectedCardsWrapper.empty()
+                }, 1000)
+            }, 4000)
+        }
     }
 })
 
@@ -734,14 +732,30 @@ const setRedCard = (cardNumber, cardID) => {
     if (cardID !== cardElement.attr('data-card')) {
         let fullCard = cardElement.parent().parent()
 
+        fullCard.off('click')
+        fullCard.one('click', selectCardFullScreenCard)
+
+        fullCard.css('position', '')
+        fullCard.css('width', '')
+        fullCard.css('height', '')
+        fullCard.css('left', '')
+        fullCard.css('top', '')
+
+        fullCard.removeClass('select-card-card-display-fullscreen')
+        fullCard.removeClass('select-card-deal-start')
+        fullCard.removeClass('select-card-display')
+        fullCard.removeClass('select-card-slide')
+        cardElement.parent().removeClass('select-card-animate')
+        cardElement.parent().removeClass('select-card-show-card')
+
         let initialPosition = fullCard.position()
 
         fullCard.css('width', fullCard.width())
         fullCard.css('height', fullCard.height())
 
-        fullCard.removeClass('select-card-display')
         fullCard.addClass('select-card-deal-start')
-
+        fullCard.position()
+        fullCard.addClass('select-card-slide')
         fullCard.position()
 
         setTimeout(() => {
@@ -753,6 +767,7 @@ const setRedCard = (cardNumber, cardID) => {
 
             setTimeout(() => {
                 fullCard.removeClass('select-card-deal-start')
+                fullCard.removeClass('select-card-slide')
                 fullCard.css('position', '')
                 fullCard.css('left', '')
                 fullCard.css('top', '')
@@ -760,13 +775,12 @@ const setRedCard = (cardNumber, cardID) => {
                 fullCard.css('height', '')
                 fullCard.css('z-index', '')
 
-                cardElement.parent().removeClass('select-card-animate')
-                cardElement.parent().removeClass('select-card-show-card')
-
-                cardElement.parent().position()
-
                 cardElement.parent().addClass('select-card-animate')
                 cardElement.parent().addClass('select-card-show-card')
+
+                setTimeout(() => {
+                    cardElement.parent().removeClass('select-card-animate')
+                }, 1000)
             }, 1200)
         }, dealDelay)
 

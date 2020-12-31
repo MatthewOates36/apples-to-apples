@@ -82,8 +82,6 @@ class GameHandler {
     }
 
     removeUser(user) {
-        this.setUserData(user, undefined)
-
         let order = this.getOrder()
         if(order.includes(user)) {
             order.splice(order.indexOf(user), 1)

@@ -507,6 +507,9 @@ body {
     position: fixed;
     top: -50vh;
     left: 45vw;
+}
+
+.select-card-slide {
     transition: width 1000ms, height 1000ms, left 1000ms, top 1000ms !important;
 }
 
