@@ -508,7 +508,8 @@ const tableFullScreenCard = event => {
         tableCardShowButton.css('display', '')
 
         tableCardShowButton.off('click')
-        tableCardShowButton.on('click', (event) => {
+
+        let show = (event) => {
             tableCardShowButton.off('click')
 
             selectCardSelectionButton.off('click')
@@ -530,12 +531,16 @@ const tableFullScreenCard = event => {
                 cardElement.css('z-index', 0)
             }, 250)
 
-            event.stopPropagation()
+            if(event) {
+                event.stopPropagation()
+            }
 
             if (judge) {
                 startSelect()
             }
-        })
+        }
+
+        tableCardShowButton.on('click', show)
     } else {
         tableCardShowButton.css('display', 'none')
     }
@@ -591,6 +596,19 @@ const tableGreenCardClick = event => {
         tableFullScreenCard(event)
     } else if (judge) {
         socket.emit('show-greencard')
+        setTimeout(() => {
+            let cardElement = tableGreenCard;
+
+            tableCardShowButton.off('click')
+
+            selectCardSelectionButton.off('click')
+            cardElement.off('click')
+            cardElement.on('click', tableGreenCardClick)
+
+            if (judge) {
+                startSelect()
+            }
+        }, 5000)
     }
 }
 
@@ -672,7 +690,7 @@ const judgeFullScreenCard = event => {
     cardElement.addClass('judge-card-display-fullscreen')
 }
 
-const judgeSetSelected = (cards) => {
+const judgeSetSelected = cards => {
     judgeRedcardsWrapper.empty()
 
     for(let card of cards) {
@@ -714,7 +732,7 @@ const judgeSetSelected = (cards) => {
     }
 }
 
-const judgeSelection = (card) => {
+const judgeSelection = card => {
     socket.emit('judge-select', JSON.stringify({selected: card}))
 }
 
@@ -795,7 +813,7 @@ const setRedCard = (cardNumber, cardID) => {
     cardElement.css('background-image', 'url(/assets/cards/red/card-' + cardID + '.jpg')
 }
 
-const selectCardFullScreenCard = (event) => {
+const selectCardFullScreenCard = event => {
     event.stopPropagation()
 
     let cardElement = $(event.target).parent().parent()
@@ -858,7 +876,7 @@ const selectCardFullScreenCard = (event) => {
     cardElement.addClass('select-card-card-display-fullscreen')
 }
 
-const selectCard = (id) => {
+const selectCard = id => {
     socket.emit('select', id)
 }
 
